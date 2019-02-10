@@ -45,7 +45,7 @@ class User(db.Model,UserMixin):
 ################## BLOGPOST CLASS #######################
 #########################################################
     
-class BlogPosts(db.Model,UserMixin):
+class BlogPost(db.Model,UserMixin):
     
     users = db.relationship(User)
 

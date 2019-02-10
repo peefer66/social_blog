@@ -41,6 +41,9 @@ class RegistrationForm(FlaskForm):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('This username has already been registered')
 
+#####################################################
+############## UPDATE FORM ##########################
+#####################################################
 
 class UpdateUserForm(FlaskForm):
     # Update user info
