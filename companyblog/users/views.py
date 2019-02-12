@@ -54,8 +54,50 @@ def login():
 
             if next == None or not next[0] == '/':
                 next = url_for('/')
-                redirect(next)
+                return redirect(next)
     return render_template('login.html', form=form)
+
+# Update account
+@users.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateUserForm()
+    if form.validate_on_submit():
+    # Check if there is a picture upload
+        if form.picture.data:
+            username = current_user.username
+            #pass to the add_profile_pic function in picture handler
+            # where the image is saved to the static folder
+            pic = add_profile_pic(form.picture.data,username)
+            #set the image to the profile image attribute in the User 
+            current_user.profile_image = pic
+        #set the username and email from the form data
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        # save to the database
+        db.session.commit()
+        flash('User account updated')
+        return redirect(url_for('users.index'))
+    # First time page is hit get populate with the  current data
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    # The profile image will either be the unchanged image if it hasn't been updated
+    # or the updated image saved to the static/profile_pic
+    profile_image = url_for('static', filename='profile_pics/'+current_user.profile_image)
+    return render_template('account.html', form=form, profile_image=profile_image)
+
+@users.route('/<username>')
+def user_posts(username):
+    # for pagination
+    page = request.args.get('page',1,type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    blog_posts = BlogPost.query.filter_by(author=user).order_by(BlogPost.date.desc().paginate(page=page,per_page=5))
+    return render_template('user_blog_post.html',blog_posts=blog_posts, user=user)
+
+
+
+
 
     
 
