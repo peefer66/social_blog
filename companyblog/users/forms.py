@@ -22,24 +22,20 @@ class LoginForm(FlaskForm):
 ###################################################
 
 class RegistrationForm(FlaskForm):
-    # Registration fioelds
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    username = StringField('User Name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(),Length(min=4, max=25)])
-    pass_confirm = PasswordField('Confirm Password', validators=[DataRequired(),
-                                EqualTo(password,
-                                message='Password must match')])
-    submit = SubmitField('Register')
+    email = StringField('Email',validators=[DataRequired(),Email()])
+    
+    username = StringField('UserName',validators=[DataRequired()])
+    password = PasswordField('Password',validators=[DataRequired(),EqualTo('pass_confirm',message='Passwords must match!')])
+    pass_confirm = PasswordField('Confirm Password',validators=[DataRequired()])
+    submit = SubmitField('Register!')
 
     def check_email(self,field):
-        # Check if email already registered
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('This Email has already been registered')
-    
+            raise ValidationError('Your email has been registered already!')
+
     def check_username(self,field):
-        # Check if username is already registered
         if User.query.filter_by(username=field.data).first():
-            raise ValidationError('This username has already been registered')
+            raise ValidationError('Your username has been registered already!')
 
 #####################################################
 ############## UPDATE FORM ##########################
