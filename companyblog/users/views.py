@@ -80,7 +80,7 @@ def account():
         # save to the database
         db.session.commit()
         flash('User account updated')
-        return redirect(url_for('users.index'))
+        return redirect(url_for('core.index'))
     # First time page is hit get populate with the  current data
     elif request.method == 'GET':
         form.username.data = current_user.username

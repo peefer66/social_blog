@@ -7,12 +7,12 @@ from flask import url_for, current_app
 def add_profile_pic(pic_upload, username):
     
     filename = pic_upload.filename
-    # mypicture.jpg  spilt => mypicture . 'jpg'
+    #Eg mypicture.jpg  spilt => mypicture . 'jpg'
     ext_type = filename.split('.')[-1]
-    # username.jpeg
+    #Eg username.jpeg
     storage_filename = str(username)+'.'+ext_type
     # Save the image
-    filepath = os.path.join(current_app.root_path, 'static/profile_pics',storage_filename)
+    filepath = os.path.join(current_app.root_path,'static\profile_pics',storage_filename)
     # required image size
     output_size = (200,200)
     # Save image
