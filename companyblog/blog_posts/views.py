@@ -15,8 +15,8 @@ blog_posts = Blueprint('blog_posts',__name__)
 ################################
 @blog_posts.route('/create', methods=['GET', 'POST'])
 @login_required
-def create_blog():
-    form = BlogPostForm
+def create_post():
+    form = BlogPostForm()
 
     if form.validate_on_submit():
         # INSTANCE OF BLOGPOST
@@ -39,17 +39,17 @@ def create_blog():
 def blog_post(blog_post_id):
     post = BlogPost.query.get_or_404(blog_post_id)
     return render_template('blog_post.html', post=post,
-                            title=post.title.data,
-                            date=post.date.data) 
+                            title=post.title,
+                            date=post.date) 
 
 ######################################
 ############## UPDATE ################
 ######################################
 
-@blog_post.route('/<int:blog_post_id>/update', methods = ['GET', 'POST'])
+@blog_posts.route('/<int:blog_post_id>/update', methods = ['GET', 'POST'])
 @login_required
 def update(blog_post_id):
-    post = BlogPost.qurey.get_or_404(blog_post_id)
+    post = BlogPost.query.get_or_404(blog_post_id)
     if post.author != current_user:
         abort(403)
     
@@ -57,7 +57,7 @@ def update(blog_post_id):
 
     if form.validate_on_submit():
         post.title = form.title.data
-        post.text.data = form.text.data
+        post.text = form.text.data
         
         db.session.add(post)
         db.session.commit()
@@ -67,7 +67,7 @@ def update(blog_post_id):
         return redirect(url_for('blog_posts.blog_post',blog_post_id=post.id))
     else:
         # if hitting the page for the first time
-        if request.method = 'GET':
+        if request.method == 'GET':
             form.title.data = post.title
             form.text.data = post.text
         
@@ -81,10 +81,10 @@ this view does'nt have a html associated with it, rather  a
 dropdown option on the edit page for blog deletion. Therefore there is 
 no 'delete.html'
 '''
-@blog_post.route('/<int:blog_post_id>/delete', methods = ['GET', 'POST'])
+@blog_posts.route('/<int:blog_post_id>/delete', methods = ['GET', 'POST'])
 @login_required
 def delete_post(blog_post_id):
-    post = BlogPost.qurey.get_or_404(blog_post_id)
+    post = BlogPost.query.get_or_404(blog_post_id)
     if post.author != current_user:
         abort(403)
     db.session.delete(post)
