@@ -83,12 +83,14 @@ no 'delete.html'
 '''
 @blog_post.route('/<int:blog_post_id>/delete', methods = ['GET', 'POST'])
 @login_required
-def update(blog_post_id):
+def delete_post(blog_post_id):
     post = BlogPost.qurey.get_or_404(blog_post_id)
     if post.author != current_user:
         abort(403)
     db.session.delete(post)
     db.session.commit()
+    flash('Post deleted')
     return redirect(url_for('core.index'))
-    
+
+
 
