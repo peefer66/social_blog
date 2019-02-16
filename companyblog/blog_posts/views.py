@@ -73,5 +73,22 @@ def update(blog_post_id):
         
     return render_template('create_post.html', form=form, title='Update Post')
 
-
+########################################
+############# DELETE ###################
+########################################
+'''
+this view does'nt have a html associated with it, rather  a
+dropdown option on the edit page for blog deletion. Therefore there is 
+no 'delete.html'
+'''
+@blog_post.route('/<int:blog_post_id>/delete', methods = ['GET', 'POST'])
+@login_required
+def update(blog_post_id):
+    post = BlogPost.qurey.get_or_404(blog_post_id)
+    if post.author != current_user:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('core.index'))
     
+
