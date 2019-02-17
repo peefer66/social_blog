@@ -19,7 +19,10 @@ from companyblog.users.picture_handler import add_profile_pic
 # Create Blueprint => register in company/__init__.py
 users = Blueprint('users', __name__)
 
-# logout
+#########################################
+############# logout ####################
+#########################################
+
 @users.route('/logout')
 def logout():
     logout_user()
@@ -42,7 +45,10 @@ def register():
 
     return render_template('register.html',form=form)
 
-# Login
+########################################
+############# Login ####################
+########################################
+
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -60,7 +66,10 @@ def login():
                 return redirect(next)
     return render_template('login.html', form=form)
 
-# Update account
+################################################
+################# Update account ###############
+################################################
+
 @users.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
@@ -90,7 +99,10 @@ def account():
     profile_image = url_for('static', filename='profile_pics/'+current_user.profile_image)
     return render_template('account.html', form=form, profile_image=profile_image)
 
-# Users list of blog posts
+###############################################
+################ POSTS ######################## 
+###############################################
+
 @users.route('/<username>')
 def user_posts(username):
     # for pagination
